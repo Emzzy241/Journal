@@ -63,9 +63,9 @@ function showBodyContent(id){
     let myJournalEntry = newJournal.findJournalEntry(id);
 
 
-    $(".all-words").html(myJournalEntry.totalWordsCount());
-    $(".all-vowels").html(myJournalEntry.countMeVowels());
-    $(".all-consonants").html(myJournalEntry.countMeConsonants());
+    $(".amount-words").html(myJournalEntry.totalWordsCount());
+    $(".amount-vowels").html(myJournalEntry.countMeVowels());
+    $(".amount-consonants").html(myJournalEntry.countMeConsonants());
     $("#" + id).html(myJournalEntry.body);
 
 }
@@ -82,15 +82,17 @@ attachContentListeners();
 
 $(document).ready( function(){
     
-    $("form.journal-form").submit( function(event){
+    console.log("jjjjjjj")
+    $("form#journal-form").submit( function(event){
         event.preventDefault();
-        console.log("jjjjjjj")
 
     
         const title = $("#title-journal").val();
-        const contentBody = $("#content-journal").val();
-        let jEntry = new JournalEntry(title, contentBody);
+        const body = $("#content-journal").val();
+        let jEntry = new JournalEntry(title, body);
         newJournal.addJournalEntry(jEntry);
+
+        console.log(jEntry);
         displayContent(newJournal);
         $("#title-journal").val("");
         $("#content-journal").val("");
