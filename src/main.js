@@ -19,6 +19,21 @@ let newJournal = new Journal();
 
 
 
+// the showJournal entry method is responsible for deleting the contents from the div displaying them and returning the contents back to the form
+
+function editJournalEntry(){
+    let myJournal = newJournal.findJournalEntry(id);
+
+    $("input#title-journal").val(myJournal.title);
+    $("textarea#content-journal").val(myJournal.body);
+
+    newJournal.deleteJournalEntry(id);
+    $("#divToDisplayContentForUser").hide();
+}
+
+
+
+
 // displayBodyContent() function is for showing the entire story user entered.... no title gets shown, it will only show
 // user all what they wrote... don't forget I have a getTeaser() method that will only show the first 8 words in the first sentence
 // to user and it will represent the rest with a "..............", later when we click on the short story it will show us the entire story entered
@@ -49,9 +64,21 @@ function displayContent(journalParam) {
 // Attach listener function
 
 function attachContentListeners(){
-    $("div#divToDisplayContentForUser").on("click", "p", function(){
+    $("ul#divToDisplayContentForUser").on("click", "p", function(){
         showBodyContent(this.id);
+
     });
+        // function for delete contact
+        $("div#delButton").on("click", ".deleteButton", () =>{
+            newJournal.deleteJournalEntry(this.id);
+            $("#divToDisplayContentForUser").hide();
+            displayContent(newJournal);
+        });
+        // function for edit contact
+        $("div#edButton").on("click", ".editButtton", () =>{
+            editJournalEntry(this.id);
+        });
+
 }
 
 // a listener function is written here to run the showBodyContent function when we click on <p></p> 
@@ -63,24 +90,42 @@ function showBodyContent(id){
     let myJournalEntry = newJournal.findJournalEntry(id);
 
 
-    $(".amount-words").html(myJournalEntry.totalWordsCount());
-    $(".amount-vowels").html(myJournalEntry.countMeVowels());
-    $(".amount-consonants").html(myJournalEntry.countMeConsonants());
+    $(".all-words").html(myJournalEntry.totalWordsCount());
+    $(".all-vowels").html(myJournalEntry.countMeVowels());
+    $(".all-consonants").html(myJournalEntry.countMeConsonants());
     $("#" + id).html(myJournalEntry.body);
 
+
+
+    // buttons for delete and edit journal
+
+    let delButton = $("div#delButton");
+    // emptying the delButton div of any class, elements
+    delButton.empty();
+    delButton.html("<button class='deleteButton btn btn-danger' id=" + myJournalEntry.id + ">Delete</button>");
+
+    // button for edit journal
+
+    let edButton = $("div#edButton");
+    
+    edButton.empty();
+    edButton.html("<button class='editButton btn btn-success' id=" + myJournalEntry.id + ">Edit</button>");
+    
+    console.log(edButton);
+    console.log(delButton);
 }
 
 // the showBodyContent function is just a function to input 3 of the methods I wrote in mybusiness logic
 // I used the .html() method to show all of this in the div class' I provided for them in index.html
 // and the final line
 
-attachContentListeners();
 
 
 // now its time to write my document.ready function
 
 
 $(document).ready( function(){
+    attachContentListeners();
     
     console.log("jjjjjjj")
     $("form#journal-form").submit( function(event){
